@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
+import Card from '../../shared/components/UIElements/Card';
 import {VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 
@@ -23,7 +24,7 @@ const DUMMY_PLACES = [
     },
     {
         id: 'p2',
-        title: 'Empire State Building',
+        title: 'Emp. State Building',
         imageURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSF3UvfYiMPpVP75ESm7Vk3iV_Zw3Ep7Qqbrw&usqp=CAU',
         address: '20 W 34th St, New York, NY 10002',
         description: 'Big ass building',
@@ -53,17 +54,19 @@ const UpdatePlace = () => {
     const identifiedPlace = DUMMY_PLACES.find(p => p.id === places);
 
     useEffect(() => {
-        setFormData({
-            title: {
-                value: identifiedPlace.title,
-                isValid: true
-            },
-            description: {
-                value: identifiedPlace.description,
-                isValid: true,
-            }
-        }, true);
-        setIsLoading(false);
+        if(identifiedPlace){
+            setFormData({
+                title: {
+                    value: identifiedPlace.title,
+                    isValid: true
+                },
+                description: {
+                    value: identifiedPlace.description,
+                    isValid: true,
+                }
+            }, true);
+            setIsLoading(false);
+        }
     }, [setFormData, identifiedPlace]);
         
     const placeUpdateSubmitHandler = event => {
@@ -73,7 +76,13 @@ const UpdatePlace = () => {
     }
 
     if(!identifiedPlace) {
-        return (<div className="center"><h2>could not find!</h2></div>)
+        return (
+            <div className="center">
+                <Card>
+                    <h2>could not find!</h2>
+                </Card>
+            </div>
+        )
     }
 
     if(isLoading) {
